@@ -1,3 +1,7 @@
+'''----------- Path Resolve Stable -----------'''
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+'''-------------------------------------------'''
 from django.shortcuts import render, redirect, HttpResponseRedirect, get_object_or_404
 from django.contrib import messages
 from .sales.models import Client, Sale, Item
@@ -44,7 +48,7 @@ def clients(request):
     if request.user.is_authenticated:
         num = request.GET.get('phone')
         if num:
-            with open("spa/sales/data/clients.json","r") as cli:
+            with open(BASE_DIR/"spa/sales/data/clients.json","r") as cli:
                 clients_data = cli.read()
             if num in clients_data:
                 messages.add_message(request, messages.ERROR, "An account is already exist with this contact number")
@@ -67,7 +71,7 @@ def clients(request):
                 messages.success(request,f'The client "{company}" has been added successfully!!')
                 
                 clients_json = serializers.serialize('json', Client.objects.all())
-                with open("spa/sales/data/clients.json","w") as ent:
+                with open(BASE_DIR/"spa/sales/data/clients.json","w") as ent:
                     ent.write(clients_json)
                 return HttpResponseRedirect('/sales/clients')            #this can be used as well
         else:
@@ -97,7 +101,7 @@ def sales_table(request):
 
 
 def client_edit(request):
-    with open("spa/sales/data/clients.json","r") as cli:
+    with open(BASE_DIR/"spa/sales/data/clients.json","r") as cli:
         clients_json = json.load(cli)
         company_arr = [x['fields']['company'] for x in clients_json]
 
@@ -182,11 +186,11 @@ class sale():
     def sale_entry(request):
         if request.user.is_authenticated:
 
-            with open("spa/sales/data/items.json","r") as items:
+            with open(BASE_DIR/"spa/sales/data/items.json","r") as items:
                 items_json = json.load(items)
                 items_arr = [x['name'] for x in items_json]
 
-            # with open("spa/sales/data/clients.json","r") as cli:
+            # with open(BASE_DIR/"spa/sales/data/clients.json","r") as cli:
             #     clients_json = json.load(cli)
             #     company_arr = [x['fields']['company'] for x in clients_json]
             company_arr = Client.objects.all().values_list('company')
@@ -300,11 +304,11 @@ class sale():
     def sale_edit(request):
         # if request.user.is_authenticated:
 
-        with open("spa/sales/data/items.json","r") as items:
+        with open(BASE_DIR/"spa/sales/data/items.json","r") as items:
                 items_json = json.load(items)
                 items_arr = [x['name'] for x in items_json]
 
-        with open("spa/sales/data/clients.json","r") as cli:
+        with open(BASE_DIR/"spa/sales/data/clients.json","r") as cli:
             clients_json = json.load(cli)
             company_arr = [x['fields']['company'] for x in clients_json]
 

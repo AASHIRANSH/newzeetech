@@ -373,7 +373,7 @@ section .heading {
 
 
 /* FOOTER */
-footert {
+div.footer {
     display: flex;
     justify-content: space-between;
     width: 100vw;
@@ -382,13 +382,13 @@ footert {
     padding: 2rem 4rem;
     margin: 2rem 0 0 0;
 }
-footert div {
+div.footer div {
     flex-grow: 1;
 }
-footert div.bgr {
+div.footer div.bgr {
     flex-grow: 2;
 }
-footert .column {
+div.footer .column {
     width: 300px;
     height: 100%;
     color: #bbb;
@@ -400,7 +400,7 @@ footert .column {
     margin: 0 1rem 1rem 0;
     transition: border 0.5s;
 }
-footert .column .heading {
+div.footer .column .heading {
     color: #fefefe;
     text-transform: uppercase;
     font-size: 1.4rem;
@@ -408,22 +408,22 @@ footert .column .heading {
     margin: 0 0 0.5rem 0;
     transition: all 0.3s;
 }
-footert .column ul {
+div.footer .column ul {
     list-style-type: none;
     font-family: Arial, Helvetica, sans-serif;
     padding: 0;
     margin: 0;
 }
-footert .column ul li {
+div.footer .column ul li {
     margin: 0 0 0.3rem 0;
 }
-footert .column ul li>a {
+div.footer .column ul li>a {
     display: block;
     /* background-color: #259156; */
     color: #bbb;
     text-decoration: none;
 }
-footert .column ul li>a:hover {
+div.footer .column ul li>a:hover {
     color: #fefefe;
     text-decoration: underline;
 }
