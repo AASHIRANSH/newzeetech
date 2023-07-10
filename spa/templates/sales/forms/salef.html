@@ -1,0 +1,520 @@
+{% extends 'base.html' %}
+
+{% block title %}Sale Edit{% endblock title %}
+
+{% block body %}
+    {% if messages %}
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </symbol>
+            <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+            </symbol>
+            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </symbol>
+        </svg>
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == "error" %}danger{% else %}{{message.tags}}{% endif %} alert-dismissible fade show my-1 d-flex align-items-center" role="alert">
+                {% if message.tags == "success" %}
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                {% else %}
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                {% endif %}
+
+                {{message}}
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+<style>
+    /*the container must be positioned relative:*/
+    .autocomplete {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .autocomplete-items {
+        position: absolute;
+        top: 110%;
+        /*positions the autocomplete items to be the same width as the container:*/
+        left: 15px;
+        right: 15px;
+        max-height: 300px;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        overflow-x: hidden;
+    }
+    
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #fff; 
+      border-bottom: 1px solid #d4d4d4; 
+    }
+    
+    /*when hovering an item:*/
+    .autocomplete-items div:hover {
+      background-color: #e9e9e9; 
+    }
+    
+    /*when navigating through the items using the arrow keys:*/
+    .autocomplete-active {
+      background-color: DodgerBlue !important; 
+      color: #ffffff; 
+    }
+</style>
+
+<form method="post" autocomplete="off" class="mb-5">
+    <div class="container my-5">
+        {% csrf_token %}
+        <!-- <div class="col-1 fs-6 fw-bold mb-2 ">Ship To:</div>
+            <div class="col-11 form-check">
+                <input class="form-check-input" type="checkbox" name="same" checked id="same" onchange="addressFunction()" value="">
+                <label class="form-check-label" for="same">
+                    Same as Billing
+                </label>
+            </div>
+        <div class="row mb-2">
+            {% for form in sales_form.visible_fields %}
+                <div class="col-sm-6 col-lg-3 mb-3">
+                    {{form.label_tag}}
+                    {{form}} {{form.errors|striptags}}
+                </div>
+            {% endfor %}
+            {% for form in sales_form.hidden_fields %}
+                {{form}}
+            {% endfor %}
+        </div> -->
+        
+        {{sales_form.time}}
+        {{sales_form.operator}}
+        <!-- REFERENCES -->
+        <div class="row mb-4">
+            <div class="col-12 fs-5 fw-bold">REFERENCES</div>
+            <div class="col-12 m-0"><hr class=""></div>
+
+            <div class="col-sm-3 col-lg-3 mb-2">
+                {{sales_form.mode.label_tag}}
+                {{sales_form.mode}} {{sales_form.mode.errors}}
+            </div>
+
+            <div class="col-sm-3 col-lg-3 mb-2">
+                {{sales_form.date.label_tag}}
+                {{sales_form.date}} {{sales_form.date.errors}}
+            </div>
+
+            <div class="col-sm-3 col-lg-3 mb-2">
+                {{sales_form.order_id.label_tag}}
+                {{sales_form.order_id}} {{sales_form.order_id.errors}}
+            </div>
+
+            <div class="col-sm-3 col-lg-3 mb-2">
+                {{sales_form.invoice_id.label_tag}}
+                {{sales_form.invoice_id}} {{sales_form.invoice_id.errors}}
+            </div>
+
+            <div class="col-sm-3 col-lg-3 mb-2">
+                {{sales_form.referrer.label_tag}}
+                {{sales_form.referrer}} {{sales_form.referrer.errors}}
+            </div>
+        </div>
+        
+        <!-- BILL TO DETAILS -->
+        <div class="row mb-4">
+            <div class="col-12 fs-5 fw-bold">CLIENT</div>
+            <div class="col-12"><hr class=""></div>
+            <div class="col-12 fs-6 fw-bold mb-2 ">Bill To:</div>
+
+            <div class="row col-9">
+                <div class="col-sm-6 col-lg-6 mb-2 position-relative">
+                    {{sales_form.company.label_tag}}
+                    <div class="input-group input-group-sm">
+                        <input type="text" name="company" class="form-control form-control-sm" required onchange="" id="id_company" {% if entry_table %}value="{{entry_table.company}}"{% endif %}>
+                        <button class="btn btn-secondary" type="submit" id="button-addon2"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </div>
+                    {{sales_form.company.errors}}
+                </div>
+
+                <div class="col-sm-6 col-lg-3 mb-2">
+                    {{sales_form.name.label_tag}}
+                    <input type="text" name="name" class="form-control form-control-sm" required id="id_name" {% if entry_table %}value="{{entry_table.name}}"{% endif %}> 
+                    {{sales_form.name.errors}}
+                </div>
+
+                <div class="col-sm-6 col-lg-3 mb-2">
+                    {{sales_form.phone.label_tag}}
+                    <input type="text" name="phone" class="form-control form-control-sm" required id="id_phone" {% if entry_table %}value="{{entry_table.phone}}"{% endif %}> 
+                    {{sales_form.phone.errors}}
+                </div>
+
+                <div class="col-sm-6 col-lg-6 mb-2">
+                    {{sales_form.email.label_tag}}
+                    <input type="email" name="email" class="form-control form-control-sm" required id="id_email" {% if entry_table %}value="{{entry_table.email}}"{% endif %}>
+                    {{sales_form.email.errors}}
+                </div>
+
+                <div class="col-sm-6 col-lg-6 mb-2">
+                    {{sales_form.gstin.label_tag}}
+                    <input type="text" name="gstin" class="form-control form-control-sm" required id="id_gstin" {% if entry_table %}value="{{entry_table.gstin}}" readonly{% endif %}>
+                    {{sales_form.gstin.errors}}
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="col-12 mb-2">
+                    {{sales_form.address.label_tag}}
+                    <textarea rows="4" name="address" class="form-control form-control-sm" required id="id_address">{% if entry_table %}{{entry_table.address}}{% endif %}</textarea>
+                    {{sales_form.address.errors}}
+                </div>
+            </div>
+        </div>
+
+        <!--SHIP TO DETAILS-->
+        <div class="row mb-4">
+            <div class="col-1 fs-6 fw-bold mb-2 ">Ship To:</div>
+            <div class="col-11 form-check">
+                <input class="form-check-input" type="checkbox" name="same" checked id="same" onchange="addressFunction()" value="">
+                <label class="form-check-label" for="same">
+                    Same as Billing
+                </label>
+            </div>
+
+
+            <div class="row col-9">
+                <div class="col-sm-6 col-lg-6 mb-2">
+                    {{sales_form.companys.label_tag}}
+                    <input type="text" name="companys" class="form-control form-control-sm" required id="id_companys" {% if entry_table %}value="{{entry_table.companys}}"{% endif %}>
+                    {{sales_form.companys.errors}}
+                </div>
+
+                <div class="col-sm-6 col-lg-3 mb-2">
+                    {{sales_form.names.label_tag}}
+                    <input type="text" name="names" class="form-control form-control-sm" required id="id_names" {% if entry_table %}value="{{entry_table.names}}"{% endif %}> 
+                    {{sales_form.names.errors}}
+                </div>
+
+                <div class="col-sm-6 col-lg-3 mb-2">
+                    {{sales_form.phones.label_tag}}
+                    <input type="text" name="phones" class="form-control form-control-sm" required id="id_phones"> 
+                </div>
+
+                <div class="col-sm-6 col-lg-6 mb-2">
+                    {{sales_form.emails.label_tag}}
+                    <input type="email" name="emails" class="form-control form-control-sm" id="id_emails" {% if entry_table %}value="{{entry_table.emails}}"{% endif %}>
+                    {{sales_form.emails.errors}}
+                </div>
+
+                <div class="col-sm-6 col-lg-6 mb-2">
+                    {{sales_form.gstins.label_tag}}
+                    <input type="text" name="gstins" class="form-control form-control-sm" required id="id_gstins" {% if entry_table %}value="{{entry_table.gstins}}"{% endif %}>
+                    {{sales_form.gstins.errors}}
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="col-12 mb-2">
+                    {{sales_form.addresss.label_tag}}
+                    <textarea rows="4" name="addresss" class="form-control form-control-sm" required id="id_addresss" {% if entry_table %}>{{entry_table.addresss}}</textarea>{% else %}></textarea>{% endif %}
+                    {{sales_form.addresss.errors}}
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCT / ITEM -->
+        <div id="item" class="row mb-2">
+            <div class="col-12 fs-5 fw-bold">PRODUCT / ITEM</div>
+            <div class="col-12"><hr class=""></div>
+
+            <div class="col-sm-6 col-lg-3 mb-2 position-relative">
+                {{sales_form.item_1.label_tag}}
+                {{sales_form.item_1}} {{sales_form.item_1.errors}}
+                <datalist id="item_list">
+                    {% for item in items %}
+                        <option>{{item.moc|upper}} {{item.name|upper}}</option>
+                    {% endfor %}
+                </datalist>
+            </div>
+        
+            <div class="col-sm-6 col-lg-3 mb-2">
+                {{sales_form.desc_1.label_tag}}
+                {{sales_form.desc_1}} {{sales_form.desc_1.errors}}
+            </div>
+
+            <div class="col-sm-6 col-lg-3 mb-2">
+                {{sales_form.qty_1.label_tag}}
+                {{sales_form.qty_1}} {{sales_form.qty_1.errors}}
+            </div>
+        
+            <div class="col-sm-6 col-lg-3 mb-2">
+                {{sales_form.rate_1.label_tag}}
+                {{sales_form.rate_1}} {{sales_form.rate_1.errors}}
+            </div>
+
+        </div>
+
+        <div id="plus_btn" class="col-3 mb-4">
+            <a onclick="addItem()" class="btn btn-secondary">
+                <i class="fa-solid fa-plus"></i>
+            </a>
+        </div>
+        
+        <hr>
+
+        <div class="col-12 mb-2">
+            {{sales_form.note.label_tag}}
+            <textarea rows="4" name="note" class="form-control form-control-sm" required id="id_note" {% if entry_table %}>{{entry_table.note}}</textarea>{% else %}></textarea>{% endif %}
+            {{sales_form.note.errors}}
+        </div>
+
+        <div class="col-sm-6 col-lg-3 mb-2 form-check">
+            <input class="form-check-input" type="checkbox" name="final" value="" id="finalcheck">
+            <label class="form-check-label" for="finalcheck">
+            Final
+            </label>
+        </div>
+
+        <div id="plus_btn" class="col-3 mb-4">
+            <a onclick="addItem()" class="btn btn-secondary">
+                <i class="fa-solid fa-plus"></i>
+            </a>
+        </div>
+        
+        <input type="submit" class="btn btn-primary"></input>
+        <button type="submit" class="btn btn-danger" name="delete" value="yes">Delete</button>
+    </div>
+</form>
+
+<!-- AUTO COMPLETE SCRIPT -->
+<script>
+    function autocomplete(inp, arr) {
+      /*the autocomplete function takes two arguments,
+      the text field element and an array of possible autocompleted values:*/
+      var currentFocus;
+      /*execute a function when someone writes in the text field:*/
+      inp.addEventListener("input", function(e) {
+          var a, b, i, val = this.value;
+          /*close any already open lists of autocompleted values*/
+          closeAllLists();
+          if (!val) { return false;}
+          currentFocus = -1;
+          /*create a DIV element that will contain the items (values):*/
+          a = document.createElement("DIV");
+          a.setAttribute("id", this.id + "autocomplete-list");
+          a.setAttribute("class", "autocomplete-items");
+          /*append the DIV element as a child of the autocomplete container:*/
+          this.parentNode.appendChild(a);
+          /*for each item in the array...*/
+          for (i = 0; i < arr.length; i++) {
+            /*check if the item starts with the same letters as the text field value:*/
+            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+              /*create a DIV element for each matching element:*/
+              b = document.createElement("DIV");
+              /*make the matching letters bold:*/
+              b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+              b.innerHTML += arr[i].substr(val.length);
+              /*insert a input field that will hold the current array item's value:*/
+              b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+              /*execute a function when someone clicks on the item value (DIV element):*/
+              b.addEventListener("click", function(e) {
+                  /*insert the value for the autocomplete text field:*/
+                  inp.value = this.getElementsByTagName("input")[0].value;
+                  /*close the list of autocompleted values,
+                  (or any other open lists of autocompleted values:*/
+                  closeAllLists();
+              });
+              a.appendChild(b);
+            }
+          }
+      });
+      /*execute a function presses a key on the keyboard:*/
+      inp.addEventListener("keydown", function(e) {
+          var x = document.getElementById(this.id + "autocomplete-list");
+          if (x) x = x.getElementsByTagName("div");
+          if (e.keyCode == 40) {
+            /*If the arrow DOWN key is pressed,
+            increase the currentFocus variable:*/
+            currentFocus++;
+            /*and and make the current item more visible:*/
+            addActive(x);
+          } else if (e.keyCode == 38) { //up
+            /*If the arrow UP key is pressed,
+            decrease the currentFocus variable:*/
+            currentFocus--;
+            /*and and make the current item more visible:*/
+            addActive(x);
+          } else if (e.keyCode == 13) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+              /*and simulate a click on the "active" item:*/
+              if (x) x[currentFocus].click();
+            }
+          }
+      });
+      function addActive(x) {
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
+      }
+      function removeActive(x) {
+        /*a function to remove the "active" class from all autocomplete items:*/
+        for (var i = 0; i < x.length; i++) {
+          x[i].classList.remove("autocomplete-active");
+        }
+      }
+      function closeAllLists(elmnt) {
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+          if (elmnt != x[i] && elmnt != inp) {
+            x[i].parentNode.removeChild(x[i]);
+          }
+        }
+      }
+      /*execute a function when someone clicks in the document:*/
+      document.addEventListener("click", function (e) {
+          closeAllLists(e.target);
+      });
+    }
+
+    /*An array containing all the country names in the world:*/
+    var company = JSON.parse("{{company|escapejs}}");
+    var items = JSON.parse("{{items|escapejs}}");
+    
+    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+    autocomplete(document.getElementById("id_company"), company);
+    autocomplete(document.getElementById("id_item_1"), items);
+    autocomplete(document.getElementById("id_item_2"), items);
+    autocomplete(document.getElementById("id_item_3"), items);
+    autocomplete(document.getElementById("id_item_4"), items);
+    autocomplete(document.getElementById("id_item_5"), items);
+</script>
+
+<script>//ship to same as bill to
+    if (document.getElementById("same").checked) {
+        document.getElementById("same").value = "yes"
+    }
+
+    function addressFunction() {
+        id_phone = document.getElementById("id_phone")
+        id_phones = document.getElementById("id_phones")
+        if (document.getElementById("same").checked) {
+            id_phones.value = id_phone.value;
+            id_phones.setAttribute("readonly","")
+            
+            document.getElementById("id_names").value =
+            document.getElementById("id_name").value;
+            
+            document.getElementById("id_companys").value =
+            document.getElementById("id_company").value;
+            
+            document.getElementById("id_emails").value =
+            document.getElementById("id_email").value;
+            
+            document.getElementById("id_gstins").value =
+            document.getElementById("id_gstin").value;
+            
+            document.getElementById("id_addresss").value =
+            document.getElementById("id_address").value;
+        } else {
+            document.getElementById("same").value = "no";
+
+            document.getElementById("id_phones").value = "";
+            id_phones.removeAttribute("disabled")
+            
+            document.getElementById("id_names").value = "";
+            
+            document.getElementById("id_companys").value = "";
+            
+            document.getElementById("id_emails").value = "";
+            
+            document.getElementById("id_gstins").value = "";
+            
+            document.getElementById("id_addresss").value = "";
+        }
+    }
+</script>
+
+<script>//add item
+    var inp_2 = "{{sales_form.item_2|escapejs}}"
+    var errors_2 = "{{sales_form.item_2.errors|escapejs}}"
+    var errors_3 = "{{sales_form.item_3.errors|escapejs}}"
+    var errors_4 = "{{sales_form.item_4.errors|escapejs}}"
+
+    var parent_el = document.getElementById("item")
+    plus_btn = document.getElementById("plus_btn")
+    var elems = 2;
+    function addItem() {
+        var row = document.createElement("div")
+        row.setAttribute("class","row")
+
+        var item = `
+            <div class="col-sm-6 col-lg-3 mb-2 position-relative">
+                <label for="id_item_${elems}">Item/Product ${elems}:</label>
+                <input type="text" name="item_${elems}" class="form-control form-control-sm" required id="id_item_${elems}">
+            </div>
+        
+            <div class="col-sm-6 col-lg-3 mb-2">
+                <label for="id_desc_${elems}">Description ${elems}:</label>
+                <input type="text" name="desc_${elems}" class="form-control form-control-sm" required id="id_desc_${elems}"> 
+            </div>
+
+            <div class="col-sm-6 col-lg-3 mb-2">
+                <label for="id_qty_${elems}">Quantity ${elems}:</label>
+                <input type="number" min="1" max="5" name="qty_${elems}" value="1" class="form-control form-control-sm" required id="id_qty_${elems}"> 
+            </div>
+        
+            <div class="col-sm-6 col-lg-3 mb-2">
+                <label for="id_rate_${elems}">Price/Rate ${elems}:</label>
+                <input type="number" min="1" max="5" name="rate_${elems}" value="1" class="form-control form-control-sm" required id="id_rate_${elems}"> 
+            </div>
+        `;
+        row.innerHTML = item;
+        parent_el.appendChild(row)
+
+
+        //CREATE ELEMENT METHOD
+        //DIV
+        // const div = document.createElement("div");
+        // div.setAttribute("id","item_"+elems)
+        // div.setAttribute("class","col-sm-6 col-lg-3 mb2")
+        // parent_el.appendChild(div, plus_btn);
+
+        // var parent_div = document.getElementById("item_"+elems)
+        // const item_label = document.createElement("label");
+        // const label_text = document.createTextNode("Item "+elems+":");
+        // item_label.appendChild(label_text);
+        // item_label.setAttribute("for","id_item");
+        // parent_div.appendChild(item_label)
+
+        // var inp = document.createElement("input");
+        // inp.setAttribute("type","text")
+        // inp.setAttribute("name","item_"+elems)
+        // inp.setAttribute("id","id_item_"+elems)
+        // inp.setAttribute("class","form-control form-control-sm")
+        // parent_div.appendChild(inp)
+
+
+        //INPUT
+        //const item_input = document.createElement("input");
+        //document.getElementById("item").appendChild(item_label);
+
+        //const input_att_id = document.createAttribute("id");
+        //input_att_id.value = "id_item";
+        //document.getElementById("item").setAttributeNode(input_att_id);
+
+        elems++; //elems+=1;
+    }
+</script>
+
+{% endblock body%}

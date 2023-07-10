@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block body %}
+    {% include 'header.html' %}
+    {% include 'spa_base.html' %}
+
+    <div class="container h-100" id="sales_table">
+        <hr>
+        <table class="table table-hover text-uppercase">
+            <thead class="bg-success text-white text-uppercase">
+            <tr class="">
+                <th scope="col">#</th>
+                <th scope="col">date</th>
+                <th scope="col">order no.</th>
+                <th scope="col">invoice no.</th>
+                <th scope="col">name</th>
+                <th scope="col">company</th>
+                <th scope="col">item</th>
+                <th scope="col">qty</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% if sales_table %}
+                    {% for entry in sales_table %}
+                        <tr id="sale_row" class="{{entry.id}} {% if entry.final == False %}bg-danger{% endif %}" onclick="window.location.assign('{% url 'sale_edit' %}?id='+this.classList[0])"> <!--data-bs-toggle="modal" data-bs-target="#salesEdit"-->
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{entry.date}}</td>
+                            <td>{{entry.order_id}}</td>
+                            <td>{{entry.invoice_id}}</td>
+                            <td>{{entry.name}}</td>
+                            <td>{{entry.company}}</td>
+                            <td>{{entry.item_1}}</td>
+                            <td>{{entry.qty_1}}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    No Data Currently!!
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="salesEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="salesLabel">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="modal_body" class="modal-body">
+            ...
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Edit</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <script>
+        var row = document.getElementById("sale_row");
+        var sales_label = document.getElementById("salesLabel");
+        var modal_body = document.getElementById("modal_body");
+
+        // row.addEventListener("click",function(){
+        //     id = this.getElementsByTagName("th")[0].innerText;
+        //     sales_label.innerText = this.getElementsByTagName("td")[4].innerText
+        //     $("#modal_body").load("/sales/salebyid?id="+id)
+            // modal_body.innerHTML = `
+            //     <div id="item" class="row mb-2">
+            //         <div class="col-12 fs-5 fw-bold">PRODUCT / ITEM</div>
+            //         <div class="col-12"><hr class=""></div>
+
+            //         <div class="col-sm-6 col-lg-3 mb-2 position-relative">
+            //             {{sales_form.item_1.label_tag}}
+            //             {{sales_form.item_1}} {{sales_form.item_1.errors}}
+            //             <datalist id="item_list">
+            //                 {% for item in items %}
+            //                     <option>{{item.moc|upper}} {{item.name|upper}}</option>
+            //                 {% endfor %}
+            //             </datalist>
+            //         </div>
+                
+            //         <div class="col-sm-6 col-lg-3 mb-2">
+            //             {{sales_form.desc_1.label_tag}}
+            //             {{sales_form.desc_1}} {{sales_form.desc_1.errors}}
+            //         </div>
+
+            //         <div class="col-sm-6 col-lg-3 mb-2">
+            //             {{sales_form.qty_1.label_tag}}
+            //             {{sales_form.qty_1}} {{sales_form.qty_1.errors}}
+            //         </div>
+                
+            //         <div class="col-sm-6 col-lg-3 mb-2">
+            //             {{sales_form.rate_1.label_tag}}
+            //             {{sales_form.rate_1}} {{sales_form.rate_1.errors}}
+            //         </div>
+        
+            //     </div>
+            // `
+        
+        // })
+    </script>
+{% endblock body %}

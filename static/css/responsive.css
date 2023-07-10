@@ -1,0 +1,26 @@
+@media screen and (min-width: 1201px) {
+    html {
+        font-size: 20px;
+    }
+}
+@media (min-width: 993px) and (max-width: 1200px) {
+    html {
+        font-size: 18px;
+    }
+}
+@media (min-width: 769px) and (max-width: 991px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+}
+@media (min-width: 1px) and (max-width: 576px) {
+    html {
+        font-size: 12px;
+    }
+}

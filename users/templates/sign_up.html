@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In / Login{% endblock title %}
+
+{% block body %}
+    {% include 'header.html' %}
+
+
+    {% if messages %}
+        {% for message in messages %}
+            <small {% if message.tags %}class="{{message.tags}}" {% endif %}>
+                {{message}}
+            </small>
+        {% endfor %}
+    {% endif %}
+
+
+    <form action="" method="post" novalidate>
+        {% csrf_token %}
+        <div class="container-fluid bg-secondary text-center text-white p-4 mb-3">
+            <h1>Sign Up</h1>
+        </div>
+        <div class="container">
+            <div class="row mb-1">
+                {% for f in fm %}
+                    <div class="col-sm-12 col-lg-6 mb-3">
+                        {{f.label_tag}}
+                        {{f}} {{f.errors|striptags}}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Sign Up</button>
+                <a onclick="window.location.assign('/users/signin')" class="btn text-success">Sign In</a>
+            </div>
+        </div>
+    </form>
+
+
+{% endblock body %}

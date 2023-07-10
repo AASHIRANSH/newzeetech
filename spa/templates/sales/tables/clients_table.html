@@ -1,0 +1,41 @@
+<div class="container my-5 overflow-auto position-relative" id="sales_table">
+    <hr class="sticky-left">
+    <table class="table table-hover" id="example">
+        <thead class="bg-primary text-uppercase text-white">
+        <tr>
+            <th style="width:50px;" scope="col">#</th>
+            <th style="width:200px;" scope="col">name</th>
+            <th style="width:300px;" scope="col">company</th>
+            <th style="width:300px" scope="col">address</th>
+            <th style="width:200px;" scope="col">phone</th>
+            <th style="width:150px;" scope="col">gstin</th>
+        </tr>
+    </thead>
+    <thead id="columnFilters">
+        <tr>
+            <th style="width:50px;" scope="col">#</th>
+            <th style="width:200px;" scope="col">name</th>
+            <th style="width:300px;" scope="col">company</th>
+            <th style="width:300px" scope="col">address</th>
+            <th style="width:200px;" scope="col">phone</th>
+            <th style="width:150px;" scope="col">gstin</th>
+        </tr>
+    </thead>
+        <tbody>
+            {% if clients_table %}
+                {% for entry in clients_table %}
+                    <tr class="{{entry.id}}" onclick="window.location.assign('{% url 'client_edit' %}?id='+this.classList[0])">
+                        <th scope="row">{{entry.id}}</th>
+                        <td>{{entry.name}}</td>
+                        <td>{{entry.company}}</td>
+                        <td>{{entry.address}}</td>
+                        <td>{{entry.phone}}</td>
+                        <td>{{entry.gstin}}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                No Data Currently!!
+            {% endif %}
+        </tbody>
+    </table>
+</div>

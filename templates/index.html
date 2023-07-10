@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block body %}
+    {% include 'header.html' %}
+    {% include 'compo/slider.html' %}
+
+    <section>
+        <div class="heading">I’m looking for...</div>
+        <div class="flex_center_baseline">
+            <div><img src="/static/img/products/conveyor.svg" width="auto" height="130px"/></div>
+            <div><img src="/static/img/products/conveyor_modular.svg" width="auto" height="130px"/></div>
+        </div>
+    </section>
+
+    <hr class="dark">
+
+    <section>
+        <div class="heading">Best Selling</div>
+        <div class="flex_items">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+    </section>
+
+    
+    {% comment %} <div id="landing">
+        <div id="title">under construction...</div>
+    </div> {% endcomment %}
+    {% include 'footer.html' with p='php' only %}
+{% endblock body %}

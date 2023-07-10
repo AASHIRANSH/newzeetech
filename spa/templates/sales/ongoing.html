@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% include 'spa_base.html' %}
+    <div class="overflow-auto position-relative" id="sales_table">
+        <hr class="sticky-left">
+        <table class="table table-hover" id="example">
+            <thead class="bg-primary text-uppercase text-white">
+            <tr>
+                <th style="width:50px;" scope="col">#</th>
+                <th style="width:200px;" scope="col">order</th>
+                <th style="width:300px;" scope="col">company</th>
+                <th style="width:300px" scope="col">item</th>
+                <th style="width:200px;" scope="col">advance</th>
+                <th style="width:150px;" scope="col">dispatch</th>
+            </tr>
+        </thead>
+        <thead id="columnFilters">
+            <tr>
+                <th style="width:50px;" scope="col">#</th>
+                <th style="width:200px;" scope="col">order</th>
+                <th style="width:300px;" scope="col">company</th>
+                <th style="width:300px" scope="col">item</th>
+                <th style="width:200px;" scope="col">advance</th>
+                <th style="width:150px;" scope="col">dispatch</th>
+            </tr>
+        </thead>
+            <tbody>
+                {% if sales_table %}
+                    {% for entry in sales_table %}
+                        <tr id="{{entry.id}}" class="{{entry.id}}" onclick="window.location.assign('{% url 'client_edit' %}?id='+this.classList[0])">
+                            <th scope="row">{{entry.id}}</th>
+                            <td>{{entry.order_id}}</td>
+                            <td>{{entry.company}}</td>
+                            <td>{{entry.item_1}}</td>
+                            <td id="adv_{{entry.id}}">{{entry.receipt_set.count}}</td>
+                            <td id="dis_{{entry.id}}">{{entry.promise}}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    No Data Currently!!
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        var tbody = document.getElementsByTagName("tbody")[0] //parent element
+        var tr = tbody.getElementsByTagName("tr");
+
+        for (let x=0; x < tr.length; x++){
+            tstt(tr[x].id);
+        }
+
+        function tstt(id) {
+            var adv = document.getElementById("adv_"+id);
+            var dis = document.getElementById("dis_"+id);
+            var promise_days = parseInt(document.getElementById("dis_"+id).innerText);
+            xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText) // list of objects receive from json;
+                    var advam = 0;
+                    for (let fval in data){
+                        obj = data[fval]; //receipts object
+                        advam += parseInt(obj["fields"]["amount"]);//amount
+                        
+                        
+                        if (fval == 0){
+                            d = new Date(obj["fields"]["date"]);
+                            d.setDate(d.getDate()+1+promise_days);
+                            dis.innerText = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+                        };
+                    }
+                    adv.innerText = advam;
+                }
+            };
+            xhttp.open("GET", "{% url 'json_response' %}?action=adv&id="+id, true);
+            xhttp.send();
+        }
+    </script>
+{% endblock body %}

@@ -1,0 +1,75 @@
+<theader class="">
+    <div id="title_bar">
+        <div id="title">
+            <a href="/"><img src="/static/img/logon.svg"/></a>
+            <a href="/">NEW ZEETECH ENGINEERS</a>
+        </div>
+        <div id="user" class="me-5">
+            {% if user.is_authenticated %}
+                <div class="ui_container pb-4">
+                    <div class="d-none d-lg-block"><a href="{% url 'profile' %}">{{user.username}}</a></div>
+                    <div class="ui_tog">
+                        <div class="ui_main shadow-lg">
+                            <ul>
+                                {% if user.is_superuser %}
+                                    <li><a href="/admin">admin panel</a></li>
+                                {% endif %}
+                                <li><a href="{% url 'profile' %}">my account</a></li>
+                                <li><a href="{% url 'profile' %}">settings</a></li>
+                                <li><a href="{% url 'sign_out' %}">sign out</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'sign_in' %}">login</a>
+                <a href="{% url 'sign_up' %}">register</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <nav class="shadow-lg">
+        <ul>
+            <li><a href="/">home</a></li>
+            <li id="products" class="sub_items_container">
+                <a href="/">products</a>
+                <div class="sub_items_tog">
+                    <div class="sub_items_main">
+                        <div class="column">
+                            <div class="heading transition_05">c</div>
+                            <ul>
+                                <li><a href="/">standard conveyor</a></li>
+                                <li><a href="/">loading conveyor</a></li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <div class="heading">rewinders</div>
+                            <ul>
+                                <li><a href="/">standard rewinder</a></li>
+                                <li><a href="/">hydraulic rewinder</a></li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <div class="heading transition_05">band sealers</div>
+                            <ul>
+                                <li><a href="/">standard conveyor</a></li>
+                                <li><a href="/">loading conveyor</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li><a href="/">repair</a></li>
+            <li><a href="/">contact us</a></li>
+        </ul>
+    </nav>
+</theader>
+
+
+<div id="divider"></div>
+<script>
+    var thdr = document.getElementsByTagName("theader")[0].getBoundingClientRect().height
+    var navdr = 0//document.getElementsByTagName("nav")[0].getBoundingClientRect().height
+    const box = thdr+navdr;
+    document.getElementById("divider").style.height = box+"px";
+</script>

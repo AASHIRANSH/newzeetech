@@ -1,0 +1,17 @@
+[
+    {
+        "name":"conveyor",
+        "hsn":"842820"
+    },
+    {
+        "name":"rewinder",
+        "hsn":"844190"
+    },
+    {
+        "name":"printer",
+        "hsn":"8443"
+    },
+    {
+        "name":"printer accessory"
+    }
+]

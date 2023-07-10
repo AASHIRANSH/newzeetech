@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In / Login{% endblock title %}
+
+{% block body %}
+    {% include 'header.html' %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{message.tags}} mb-3" role="alert">
+                {{message}}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="flex_center">
+        <div class="container">
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <form id="login_form" action="" method="post" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+                                <p>{{error}}</p>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        {% for f in form %}
+                            <div class="mb-3">
+                                <div class="mb-2">{{f.label_tag}}</div>
+                                {{f}} {{f.errors|striptags}}
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-success">Sign In</button>
+                        <a onclick="window.location.assign('/users/signup')" class="btn text-success">Create an account</a>
+                    </form>
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementsByTagName('input').classList.add("form-control");
+    </script>
+{% endblock body %}

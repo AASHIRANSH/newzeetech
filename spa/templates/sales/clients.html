@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Clients{% endblock title %}
+
+{% block body %}
+    {% include 'header.html' %}
+    {% include 'spa_base.html' %}
+    
+
+    <form method="post" novalidate class="my-5">
+        <div class="container">
+            <div class="row mb-2">
+                {% csrf_token %}
+                {% comment %} {% for form in sales_form.visible_fields %}
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        {{form.label_tag}}
+                        {{form}} {{form.errors|striptags}}
+                    </div>
+                {% endfor %}
+                {% for form in sales_form.hidden_fields %}
+                    {{form}}
+                {% endfor %} {% endcomment %}
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12 fs-5 fw-bold">ADD A CLIENT / CUSTOMER </div>
+                <div class="col-12"><hr class=""></div>
+                
+                <div class="row col-9">
+                    <div class="col-sm-6 col-lg-3 mb-2">
+                        {{sales_form.phone.label_tag}}
+                        <input type="text" name="phone" class="form-control form-control-sm" onchange="window.location.assign(&#x27;/sales/clients?phone=&#x27;+this.value)" required id="id_phone" value="{{num|default:""}}"> 
+                        {{sales_form.phone.errors}}
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3 mb-2">
+                        {{sales_form.name.label_tag}}
+                        <input type="text" name="name" class="form-control form-control-sm" required id="id_name"> 
+                        {{sales_form.name.errors}}
+                    </div>
+                
+                    <div class="col-sm-6 col-lg-6 mb-2">
+                        {{sales_form.company.label_tag}}
+                        <input type="text" name="company" class="form-control form-control-sm" required id="id_company">
+                        {{sales_form.company.errors}}
+                    </div>
+
+                    <div class="col-sm-6 col-lg-6 mb-2">
+                        {{sales_form.email.label_tag}}
+                        <input type="email" name="email" class="form-control form-control-sm" id="id_email">
+                        {{sales_form.email.errors}}
+                    </div>
+
+                    <div class="col-sm-6 col-lg-6 mb-2">
+                        {{sales_form.gstin.label_tag}}
+                        <input type="text" name="gstin" class="form-control form-control-sm" required id="id_gstin">
+                        {{sales_form.gstin.errors}}
+                    </div>
+                </div>
+                
+                <div class="col-3">
+                    <div class="col-12 mb-2">
+                        {{sales_form.address.label_tag}}
+                        <textarea rows="4" name="address" class="form-control form-control-sm" required id="id_address"></textarea>
+                        {{sales_form.address.errors}}
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+
+    {% include 'sales/tables/clients_table.html' %}
+    
+{% endblock body%}

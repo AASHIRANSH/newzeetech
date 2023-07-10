@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Sale Entry{% endblock title %}
+
+{% block body %}
+{% include 'header.html' %}
+{% include 'spa_base.html' %}
+
+<form method="post" novalidate autocomplete="off" class="mb-5">
+    {% csrf_token %}
+    
+    <div class="container py-5">
+        <div class="row row-cols-3">
+            <div class="col mb-2">
+                <div class="input-group">
+                    <span class="input-group-text">{{form.date.label_tag}}</span>
+                    {{form.date}}
+                    {{f.date.errors}}
+                </div>
+            </div>
+            
+            <div class="col mb-2">
+                <div class="input-group">
+                    <span class="input-group-text">₹</span>
+                    {{form.amount}}
+                    {{f.amount.errors}}
+                </div>
+            </div>
+            
+            <div class="col mb-2">
+                <div class="input-group">
+                    <span class="input-group-text">{{form.sale.label_tag}}</span>
+                    {{form.sale}}
+                    {{f.sale.errors}}
+                </div>
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+<script>//modifying referrer input
+    var date = document.getElementById("id_date")
+    date.classList.add("form-control", "form-control-sm") //referrer.className += " form-control form-control-sm";
+    date.setAttribute("type","date");
+
+    var amount = document.getElementById("id_amount")
+    amount.classList.add("form-control", "form-control-sm") //referrer.className += " form-control form-control-sm";
+    amount.setAttribute("type","number");
+    
+    var sale = document.getElementById("id_sale")
+    sale.classList.add("form-select", "form-select-sm") //referrer.className += " form-select form-select-sm";
+</script>
+
+{% endblock body %}
