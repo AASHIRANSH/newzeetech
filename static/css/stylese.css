@@ -373,22 +373,22 @@ section .heading {
 
 
 /* FOOTER */
-footer {
+footert {
     display: flex;
     justify-content: space-between;
     width: 100vw;
-    background-color: #222;
+    background-color: #222222;
     height: 300px;
     padding: 2rem 4rem;
     margin: 2rem 0 0 0;
 }
-footer div {
+footert div {
     flex-grow: 1;
 }
-footer div.bgr {
+footert div.bgr {
     flex-grow: 2;
 }
-footer .column {
+footert .column {
     width: 300px;
     height: 100%;
     color: #bbb;
@@ -400,7 +400,7 @@ footer .column {
     margin: 0 1rem 1rem 0;
     transition: border 0.5s;
 }
-footer .column .heading {
+footert .column .heading {
     color: #fefefe;
     text-transform: uppercase;
     font-size: 1.4rem;
@@ -408,22 +408,22 @@ footer .column .heading {
     margin: 0 0 0.5rem 0;
     transition: all 0.3s;
 }
-footer .column ul {
+footert .column ul {
     list-style-type: none;
     font-family: Arial, Helvetica, sans-serif;
     padding: 0;
     margin: 0;
 }
-footer .column ul li {
+footert .column ul li {
     margin: 0 0 0.3rem 0;
 }
-footer .column ul li>a {
+footert .column ul li>a {
     display: block;
     /* background-color: #259156; */
     color: #bbb;
     text-decoration: none;
 }
-footer .column ul li>a:hover {
+footert .column ul li>a:hover {
     color: #fefefe;
     text-decoration: underline;
 }
