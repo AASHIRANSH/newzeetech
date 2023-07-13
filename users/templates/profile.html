@@ -31,14 +31,26 @@
                 <button type="submit" class="btn btn-primary">Edit Profile</button>
             </div>
 
-            <div>
+            <div class="">
                 {% if perms.spa.add_sale %}
                     <button onclick="window.location.assign('{% url 'receipt' %}')" class="btn btn-primary">Payments</button>
                     <button onclick="window.location.assign('{% url 'client_page' %}')" class="btn btn-primary">Clients</button>
-                    <button onclick="window.location.assign('{% url 'spa' %}')" class="btn btn-primary">Sale Entry</button>
-                    <button onclick="window.location.assign('{% url 'ongoing' %}')" class="btn btn-primary">Ongoing</button>
+                
+                    <!-- Example split danger button -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" onclick="window.location.assign('{% url 'spa' %}')">Sale</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'sale_entry' %}">sale entry</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ongoing' %}">ongoing</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Separated link</a></li>
+                        </ul>
+                        </div>
+                    </div>
                 {% endif %}
-            </div>
         </div>
         <!--END PROFILE BUTTONS-->
     </div>

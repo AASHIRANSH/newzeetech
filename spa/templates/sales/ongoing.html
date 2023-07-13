@@ -28,7 +28,7 @@
             <tbody>
                 {% if sales_table %}
                     {% for entry in sales_table %}
-                        <tr id="{{entry.id}}" class="{{entry.id}}" onclick="window.location.assign('{% url 'client_edit' %}?id='+this.classList[0])">
+                        <tr id="{{entry.id}}" class="{{entry.id}}" onclick="window.location.assign('{% url 'sale_edit' %}?id='+this.classList[0])">
                             <th scope="row">{{entry.id}}</th>
                             <td>{{entry.order_id}}</td>
                             <td>{{entry.company}}</td>

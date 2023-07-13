@@ -10,9 +10,7 @@ Company     : NewZeetechEngineers
     --bg-dark: #222222;
     --white: #ffffff;
 }
-.container {
-    width: 95vw;
-}
+
 html {
     font-size: 18px;
 }
@@ -358,15 +356,13 @@ theader #title_bar #user {
     color: #fff;
     padding: 10px;
 }
-section {
-    margin: 3rem 0;
-}
-section .heading {
+
+div.heading {
     width: 100vw;
     font-family: Libre_Baskerville;
     font-size: 2rem;
     text-align: center;
-    margin: 2rem;
+    margin: 3rem 0;
 }
 
 
@@ -375,11 +371,11 @@ section .heading {
 /* FOOTER */
 div.footer {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+    flex-flow: row wrap;
     width: 100vw;
     background-color: #222222;
-    height: 300px;
-    padding: 2rem 4rem;
+    padding: 2rem 1rem;
     margin: 2rem 0 0 0;
 }
 div.footer div {
@@ -389,8 +385,8 @@ div.footer div.bgr {
     flex-grow: 2;
 }
 div.footer .column {
-    width: 300px;
-    height: 100%;
+    width: 250px;
+    height: 300px;
     color: #bbb;
     background-color: #333;
     text-transform: capitalize;
@@ -400,7 +396,7 @@ div.footer .column {
     margin: 0 1rem 1rem 0;
     transition: border 0.5s;
 }
-div.footer .column .heading {
+div.footer .column .cheading {
     color: #fefefe;
     text-transform: uppercase;
     font-size: 1.4rem;

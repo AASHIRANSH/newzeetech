@@ -29,7 +29,7 @@
                 <div class="row col-9">
                     <div class="col-sm-6 col-lg-3 mb-2">
                         {{sales_form.phone.label_tag}}
-                        <input type="text" name="phone" class="form-control form-control-sm" onchange="window.location.assign(&#x27;/sales/clients?phone=&#x27;+this.value)" required id="id_phone" value="{{num|default:""}}"> 
+                        <input type="text" name="phone" class="form-control form-control-sm" onchange="window.location.assign(`{% url 'client_page' %}?phone=`this.value)" required id="id_phone" value="{{num|default:""}}"> 
                         {{sales_form.phone.errors}}
                     </div>
 

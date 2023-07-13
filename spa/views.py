@@ -46,18 +46,19 @@ def supplier(request):
 
 def clients(request):
     if request.user.is_authenticated:
-        num = request.GET.get('phone')
-        if num:
-            with open(BASE_DIR/"spa/sales/data/clients.json","r") as cli:
-                clients_data = cli.read()
-            if num in clients_data:
-                messages.add_message(request, messages.ERROR, "An account is already exist with this contact number")
-                return HttpResponseRedirect('/sales/clients')
+
+        companies = Client.objects.values_list('company', flat=True) #returns list items as tuples if not given the argument flat=True
+        
         if request.method == 'POST':
-            client_entry_form = forms.ClientEntry(request.POST) #this is a complete form with html code and predefined values came from the user or submitted form
+            form = forms.ClientEntry(request.POST) #this is a complete form with html code and predefined values came from the user or submitted form
             
-            if client_entry_form.is_valid():
-                cleaned_data = client_entry_form.cleaned_data  #this dictionary contains all submitted input from user
+            data_post = request.POST
+            if data_post.get('company') in companies:
+                messages.add_message(request, messages.ERROR, "An account is already exist with this company name")
+                return redirect('client_page')
+            
+            if form.is_valid():
+                cleaned_data = form.cleaned_data  #this dictionary contains all submitted input from user
                 company=cleaned_data['company']
                 entry = Client(
                     phone=cleaned_data['phone'],
@@ -73,24 +74,18 @@ def clients(request):
                 clients_json = serializers.serialize('json', Client.objects.all())
                 with open(BASE_DIR/"spa/sales/data/clients.json","w") as ent:
                     ent.write(clients_json)
-                return HttpResponseRedirect('/sales/clients')            #this can be used as well
+                return redirect('client_page')            #this can be used as well
         else:
-            client_entry_form = forms.ClientEntry()    #append "(auto_id='id_%s')" to use custom id behaviour, this example is set by default
-        try:
-            entry_table = Client.objects.get(phone=num)
-        except:
-            entry_table = None
+            form = forms.ClientEntry()    #append "(auto_id='id_%s')" to use custom id behaviour, this example is set by default
+
         vars = {
             "title":"Clients",
-            "num":num,
-            "clients_table":Client.objects.all(),
-            "sales_form":client_entry_form
+            "clients_table":Client.objects.values(),
+            "sales_form":form
         }
         return render(request, "sales/clients.html", vars)
     else:
         return redirect('sign_in')
-
-
 
 
 def sales_table(request):
@@ -193,8 +188,10 @@ class sale():
             # with open(BASE_DIR/"spa/sales/data/clients.json","r") as cli:
             #     clients_json = json.load(cli)
             #     company_arr = [x['fields']['company'] for x in clients_json]
-            company_arr = Client.objects.all().values_list('company')
-
+            comp_qd = Client.objects.values_list('company', flat=True)
+            companies = []
+            for x in comp_qd:
+                companies.append(x)
             # sales_entry_form = SaleEntry(auto_id='sale_%s',label_suffix=' - ', initial={'item':'conveyor','rate':30000})
 
             # sales_entry_form = SaleEntry(auto_id=False)    # use it to remove the 'label' tag and 'id' attribute
@@ -285,11 +282,6 @@ class sale():
             else:
                 sales_entry_form = forms.SaleEntry()    #append "(auto_id='id_%s')" to use custom id behaviour, this example is set by default
 
-
-            companies = []
-            for x in company_arr:
-                companies.append(x[0])
-
             vars = {
                 "title":"Sale Entry",
                 "sales_form":sales_entry_form,
@@ -316,7 +308,10 @@ class sale():
         sale = Sale.objects.get(id=id)
 
         if request.method == "POST":
-            form = forms.SaleEntry(request.POST or None, instance=sale)
+            req_post = request.POST.copy()
+            req_post.update({'operator':sale.operator})
+            
+            form = forms.SaleEntry(req_post or None, instance=sale)
 
             '''deleting an entry'''
             if request.POST.get('delete'):
