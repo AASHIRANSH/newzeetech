@@ -90,7 +90,7 @@ def clients(request):
 
 def sales_table(request):
     vars = {
-        "sales_table":Sale.objects.all(),
+        "sales_table":Sale.objects.all().order_by("-date"),
     }
     return render(request,"sales/sales_table_page.html", vars)
 
@@ -369,7 +369,7 @@ class sale():
     def ongoing(request):
         vars = {
             "title":"Ongoing Orders",    
-            "sales_table":Sale.objects.all(),
+            "sales_table":Sale.objects.filter(final=False),
             "payments":Receipt.objects.all()
         }
         return render(request, "sales/ongoing.html", vars)

@@ -8,6 +8,7 @@
             <thead class="bg-primary text-uppercase text-white">
             <tr>
                 <th style="width:50px;" scope="col">#</th>
+                <th style="width:200px;" scope="col">date</th>
                 <th style="width:200px;" scope="col">order</th>
                 <th style="width:300px;" scope="col">company</th>
                 <th style="width:300px" scope="col">item</th>
@@ -18,6 +19,7 @@
         <thead id="columnFilters">
             <tr>
                 <th style="width:50px;" scope="col">#</th>
+                <th style="width:200px;" scope="col">date</th>
                 <th style="width:200px;" scope="col">order</th>
                 <th style="width:300px;" scope="col">company</th>
                 <th style="width:300px" scope="col">item</th>
@@ -29,12 +31,13 @@
                 {% if sales_table %}
                     {% for entry in sales_table %}
                         <tr id="{{entry.id}}" class="{{entry.id}}" onclick="window.location.assign('{% url 'sale_edit' %}?id='+this.classList[0])">
-                            <th scope="row">{{entry.id}}</th>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td id="date_{{entry.id}}">{{entry.date}}</td>
                             <td>{{entry.order_id}}</td>
                             <td>{{entry.company}}</td>
                             <td>{{entry.item_1}}</td>
-                            <td id="adv_{{entry.id}}">{{entry.receipt_set.count}}</td>
-                            <td id="dis_{{entry.id}}">{{entry.promise}}</td>
+                            <td id="adv_{{entry.id}}" class="text-center">{{entry.receipt_set.count}}</td>
+                            <td id="dis_{{entry.id}}" class="text-center">{{entry.promise}}</td>
                         </tr>
                     {% endfor %}
                 {% else %}
@@ -50,11 +53,12 @@
         var tbody = document.getElementsByTagName("tbody")[0] //parent element
         var tr = tbody.getElementsByTagName("tr");
 
-        for (let x=0; x < tr.length; x++){
+        for (let x=0; x < tr.length; x++) {
             tstt(tr[x].id);
         }
 
         function tstt(id) {
+            var date = document.getElementById("date_"+id);
             var adv = document.getElementById("adv_"+id);
             var dis = document.getElementById("dis_"+id);
             var promise_days = parseInt(document.getElementById("dis_"+id).innerText);
@@ -63,22 +67,19 @@
                 if (this.readyState == 4 && this.status == 200) {
                     var data = JSON.parse(this.responseText) // list of objects receive from json;
                     var advam = 0;
-                    for (let fval in data){
+                    for (let fval in data){//adding all receipts amount together of the selected sale
                         obj = data[fval]; //receipts object
                         advam += parseInt(obj["fields"]["amount"]);//amount
-                        
-                        
-                        if (fval == 0){
-                            d = new Date(obj["fields"]["date"]);
-                            d.setDate(d.getDate()+1+promise_days);
-                            dis.innerText = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
-                        };
                     }
-                    adv.innerText = advam;
+                    d = new Date(date.innerText);//Converting element datetext to JS Date Object. //obj["fields"]["date"] NOTE:use this one if you want to show the calculated date only for the entry for which a receipt has made.
+                    d.setDate(d.getDate()+1+promise_days); //adding promise days to the entry date
+                    dis.innerText = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`; //rendering the date in td with id dis_id
+                    adv.innerText = advam; //rendering the calculated advance in adv_id element
                 }
             };
             xhttp.open("GET", "{% url 'json_response' %}?action=adv&id="+id, true);
             xhttp.send();
+            console.log(promise_days)
         }
     </script>
 {% endblock body %}

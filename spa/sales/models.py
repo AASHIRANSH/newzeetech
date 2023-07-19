@@ -42,8 +42,8 @@ class Sale(models.Model):
     operator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     mode = models.IntegerField()
-    settled = models.BooleanField(blank=True, null=True)
-    final = models.BooleanField(blank=True, null=True)
+    settled = models.BooleanField(default=False)
+    final = models.BooleanField(default=False)
     promise = models.IntegerField()
     
 
