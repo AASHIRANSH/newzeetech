@@ -33,6 +33,7 @@
 
             <div class="">
                 {% if perms.spa.add_sale %}
+                    <button onclick="window.location.assign('{% url 'payroll' %}')" class="btn btn-primary">Payroll</button>
                     <button onclick="window.location.assign('{% url 'receipt' %}')" class="btn btn-primary">Payments</button>
                     <button onclick="window.location.assign('{% url 'client_page' %}')" class="btn btn-primary">Clients</button>
                 

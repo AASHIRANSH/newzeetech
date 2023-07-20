@@ -144,15 +144,20 @@ def client_edit(request):
 class account():
     def receipt(request):
         if request.user.is_authenticated:
-            company_arr = Client.objects.all().values_list('company')
+            receipts = Receipt.objects.all()
 
+            
+            company_arr = Client.objects.all().values_list('company', flat=True)
+            companies = []
+            for x in company_arr:
+                companies.append(x)
+            
+            
             #submitted form
             if request.method == 'POST':
                 form = forms.ReceiptEntry(request.POST)
                 
                 if form.is_valid():
-                    cd = form.cleaned_data
-
                     form.save()
                     # entry = Receipt()
                     # entry.save()
@@ -163,13 +168,10 @@ class account():
                 form = forms.ReceiptEntry()
 
 
-            companies = []
-            for x in company_arr:
-                companies.append(x[0])
-
             vars = {
                 "title":"Receipt Entry",
                 "form":form,
+                "receipts":receipts,
                 "company":json.dumps(companies),
             }
             return render(request, "accounts/receipt.html", vars)

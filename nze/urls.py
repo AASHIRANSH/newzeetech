@@ -24,7 +24,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     # path('accounts/', include('users.urls')),
     path('spa/', include('spa.urls')),
-    # path('payrolls/', include('payrolls.urls')),
+    path('payrolls/', include('payrolls.urls')),
 ]
 
 

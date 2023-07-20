@@ -301,6 +301,7 @@ class SaleEntry(forms.ModelForm):
 
 
 class ReceiptEntry(forms.ModelForm):
+    date = forms.DateField(initial=datetime.date.today())
     class Meta:
         model = Receipt
         fields = "__all__"

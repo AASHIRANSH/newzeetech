@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Employees{% endblock title %}
+
+{% block body %}
+{% include 'header.html' %}
+{% include 'employees_base.html' %}
+
+<form method="post" novalidate autocomplete="off" class="mb-5">
+    {% csrf_token %}
+    
+    <div class="container py-5">
+        <div class="row row-cols-3">
+            <div class="col mb-2">
+                <div class="input-group">
+                    <span class="input-group-text">{{form.date_joined.label_tag}}</span>
+                    {{form.date_joined}}
+                    {{form.date_joined.errors}}
+                </div>
+            </div>
+            
+            <div class="col mb-2">
+                <div class="input-group">
+                    <span class="input-group-text">Name</span>
+                    {{form.name}}
+                    {{form.name.errors}}
+                </div>
+            </div>
+            
+            <div class="col mb-2">
+                <div class="input-group">
+                    <span class="input-group-text">{{form.salary.label_tag}}</span>
+                    {{form.salary}}
+                    {{form.salary.errors}}
+                </div>
+            </div>
+
+            <div class="col mb-2">
+                <div class="input-group">
+                    <span class="input-group-text">Phone</span>
+                    {{form.phone}}
+                    {{form.phone.errors}}
+                </div>
+            </div>
+
+            <div class="col mb-2">
+                <div class="input-group">
+                    <span class="input-group-text">Address</span>
+                    {{form.address}}
+                    {{form.address.errors}}
+                </div>
+            </div>
+
+        </div>
+        <input type="submit" class="btn btn-primary" value="Submit"></input>
+    </div>
+</form>
+
+<div class="container" id="receipts_table">
+    <hr>
+    <table class="table table-hover text-uppercase">
+        <thead class="bg-success text-white text-uppercase">
+        <tr class="">
+            <th scope="col">#</th>
+            <th scope="col">name</th>
+            <th scope="col">salary</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% if employees %}
+                {% for employee in employees %}
+                    <tr id="sale_row" class="{{entry.id}} {% if entry.final == False %}bg-danger{% endif %}" onclick="window.location.assign('{% url 'sale_edit' %}?id='+this.classList[0])"> <!--data-bs-toggle="modal" data-bs-target="#salesEdit"-->
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{employee.name}}</td>
+                        <td>{{employee.salary}}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                No Receipts Currently!!
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<script>//modifying referrer input
+    var date = document.getElementById("id_date_joined")
+    date.classList.add("form-control", "form-control-sm") //referrer.className += " form-control form-control-sm";
+    date.setAttribute("type","date");
+
+    var emp_name = document.getElementById("id_name")
+    emp_name.classList.add("form-control", "form-control-sm") //referrer.className += " form-control form-control-sm";
+    
+    var emp_phone = document.getElementById("id_phone")
+    emp_phone.classList.add("form-control", "form-control-sm") //referrer.className += " form-control form-control-sm";
+    
+    var emp_address = document.getElementById("id_address")
+    emp_address.classList.add("form-control", "form-control-sm") //referrer.className += " form-control form-control-sm";
+    
+    var salary = document.getElementById("id_salary")
+    salary.classList.add("form-control", "form-control-sm") //referrer.className += " form-select form-select-sm";
+
+</script>
+
+{% endblock body %}

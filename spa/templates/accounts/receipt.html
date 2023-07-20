@@ -40,6 +40,34 @@
     </div>
 </form>
 
+<div class="container" id="receipts_table">
+    <hr>
+    <table class="table table-hover text-uppercase">
+        <thead class="bg-success text-white text-uppercase">
+        <tr class="">
+            <th scope="col">#</th>
+            <th scope="col">date</th>
+            <th scope="col">order no.</th>
+            <th scope="col">company</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% if receipts %}
+                {% for receipt in receipts %}
+                    <tr id="sale_row" class="{{entry.id}} {% if entry.final == False %}bg-danger{% endif %}" onclick="window.location.assign('{% url 'sale_edit' %}?id='+this.classList[0])"> <!--data-bs-toggle="modal" data-bs-target="#salesEdit"-->
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{receipt.date}}</td>
+                        <td>{{receipt.sale.order_id}}</td>
+                        <td>{{receipt.sale.company}}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                No Receipts Currently!!
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
 <script>//modifying referrer input
     var date = document.getElementById("id_date")
     date.classList.add("form-control", "form-control-sm") //referrer.className += " form-control form-control-sm";
