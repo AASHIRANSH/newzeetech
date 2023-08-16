@@ -144,25 +144,42 @@ def client_edit(request):
 class account():
     def receipt(request):
         if request.user.is_authenticated:
-            receipts = Receipt.objects.all()
+            receipts = Receipt.objects.all().order_by("-date")
+            sales = Sale.objects.filter(payments=False)
 
             
-            company_arr = Client.objects.all().values_list('company', flat=True)
-            companies = []
-            for x in company_arr:
-                companies.append(x)
+            # companies = []
+            # for x in company_arr:
+            #     companies.append(x)
             
             
             #submitted form
             if request.method == 'POST':
-                form = forms.ReceiptEntry(request.POST)
+                rpost = request.POST
+                form = forms.ReceiptEntry(rpost)
                 
                 if form.is_valid():
                     form.save()
-                    # entry = Receipt()
-                    # entry.save()
 
-                    messages.success(request,'Receipt Entry was Added!!')
+                    csale = Sale.objects.get(id=rpost.get('sale'))
+                    salereceipts = csale.receipt_set.all()
+                    receipts_total = 0
+
+                    for ram in salereceipts:
+                        receipts_total+=ram.amount
+                    
+                    if csale.grand_total>=receipts_total:
+                        csale.payments = True
+                        csale.save()
+                        if csale.grand_total>receipts_total:
+                            messages.error(request, f'Extra payment received from {csale.company}')
+                        else:
+                            messages.success(request, f'Payments completed of {csale.company}')
+                    else:
+                            messages.error(request, f'Payments are still outstanding of {csale.company}')
+
+
+                    messages.success(request,'Receipt was Added!!')
                     return redirect('receipt')
             else:
                 form = forms.ReceiptEntry()
@@ -172,7 +189,8 @@ class account():
                 "title":"Receipt Entry",
                 "form":form,
                 "receipts":receipts,
-                "company":json.dumps(companies),
+                "sales":sales,
+                # "company":json.dumps(companies),
             }
             return render(request, "accounts/receipt.html", vars)
         else:
@@ -191,6 +209,7 @@ class sale():
             #     clients_json = json.load(cli)
             #     company_arr = [x['fields']['company'] for x in clients_json]
             comp_qd = Client.objects.values_list('company', flat=True)
+            print(comp_qd)
             companies = []
             for x in comp_qd:
                 companies.append(x)
@@ -371,10 +390,19 @@ class sale():
     def ongoing(request):
         vars = {
             "title":"Ongoing Orders",    
-            "sales_table":Sale.objects.filter(final=False),
+            "sales_table":Sale.objects.filter(despatched=False),
             "payments":Receipt.objects.all()
         }
         return render(request, "sales/ongoing.html", vars)
+    
+
+    def outstanding(request):
+        vars = {
+            "title":"Outstanding Payments",    
+            "sales_table":Sale.objects.filter(payments=False),
+            "payments":Receipt.objects.all()
+        }
+        return render(request, "sales/outstanding.html", vars)
 
 
 def json_response(request):

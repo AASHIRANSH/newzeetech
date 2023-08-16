@@ -41,6 +41,9 @@ body::-webkit-scrollbar-thumb {
 body::-webkit-scrollbar-thumb:hover {
     background: var(--bg-dark);
 }
+input[type="checkbox"][readonly] {
+  pointer-events: none;
+}
 /*------------ END BODY -----------*/
 
 /* LINKS */

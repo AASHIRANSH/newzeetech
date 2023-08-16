@@ -30,7 +30,12 @@
             <div class="col mb-2">
                 <div class="input-group">
                     <span class="input-group-text">{{form.sale.label_tag}}</span>
-                    {{form.sale}}
+                    <select name="sale" id="id_sale" class="form-select form-select-sm text-uppercase">
+                      <option value="" selected="">---------</option>
+                      {% for sale in sales %}
+                        <option value="{{sale.id}}">{{sale.order_id}} - {{sale.company}}</option>
+                      {% endfor %}
+                    </select>
                     {{f.sale.errors}}
                 </div>
             </div>
@@ -49,6 +54,7 @@
             <th scope="col">date</th>
             <th scope="col">order no.</th>
             <th scope="col">company</th>
+            <th scope="col">amount</th>
         </tr>
         </thead>
         <tbody>
@@ -59,6 +65,7 @@
                         <td>{{receipt.date}}</td>
                         <td>{{receipt.sale.order_id}}</td>
                         <td>{{receipt.sale.company}}</td>
+                        <td>₹ {{receipt.amount}}</td>
                     </tr>
                 {% endfor %}
             {% else %}

@@ -42,9 +42,11 @@ class Sale(models.Model):
     operator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     mode = models.IntegerField()
-    settled = models.BooleanField(default=False)
-    final = models.BooleanField(default=False)
     promise = models.IntegerField()
+
+    payments = models.BooleanField(default=False)
+    settled = models.BooleanField(default=False)
+    despatched = models.BooleanField(default=False)
     
 
     '''for all'''
@@ -129,6 +131,8 @@ class Sale(models.Model):
     desc_10 = models.CharField(max_length=200,null=True, blank=True)
     qty_10 = models.IntegerField(null=True, blank=True)
     rate_10 = models.IntegerField(null=True, blank=True)
+
+    grand_total = models.IntegerField()
 
     note = models.TextField()
 

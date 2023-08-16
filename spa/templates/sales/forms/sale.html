@@ -93,10 +93,12 @@
             
             <div class="col mb-2">
                 {{sales_form.referrer.label_tag}}
-                {{sales_form.referrer}} {{sales_form.referrer.errors}}
+                {{sales_form.referrer}}
+                {{sales_form.referrer.errors}}
                 <script>//modifying referrer input
-                    referrer = document.getElementById("id_referrer")
+                    var referrer = document.getElementById("id_referrer")
                     referrer.classList.add("form-select", "form-select-sm") //referrer.className += " form-select form-select-sm";
+                    referrer.setAttribute("onchange", "form_validate()")
                 </script>
             </div>
 
@@ -340,6 +342,43 @@
         </div>
 
         <hr>
+        <div class="d-flex justify-content-between">
+            <div>
+                <div class="mb-2">
+                    Total:
+                </div>
+                <div class="mb-2">
+                    Freight:
+                </div>
+                <div class="mb-2">
+                    GST:
+                </div>
+                <div class="fw-bold">
+                    Grand Total:
+                </div>
+            </div>
+            <div class="text-end">
+                <div class="mb-2">
+                    00.00
+                </div>
+                <div class="mb-2">
+                    NA
+                </div>
+                <div class="mb-2">
+                    <select class="form-select form-select-sm" id="gst" onchange="gr_total()">
+                        <option value="1.6">6%</option>
+                        <option value="1.12">12%</option>
+                        <option value="1.18" selected>18%</option>
+                    </select>
+                </div>
+                <div>
+                    <div id="id_grandd_total">{{sales_form.grand_total.value|default:"0.00"}}</div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="grand_total" value="{{sales_form.grand_total.value|default:'0'}}" required id="id_grand_total">
+
+        <hr class="mb-4">
         
         <div class="col-12 mb-2">
             {{sales_form.note.label_tag}}
@@ -348,18 +387,28 @@
         </div>
         
         <div class="col-sm-6 col-lg-3 mb-2 form-check">
-            <input class="form-check-input" type="checkbox" name="final" value="true" id="finalcheck" onchange="finalCheck()" {% if sales_form.final.value %}checked{% endif %}>
-            <label class="form-check-label" for="finalcheck">
-            Final
+            <input class="form-check-input" type="checkbox" name="despatched" value="true" id="finalcheck" onchange="finalCheck()" {% if sales_form.despatched.value %}checked{% endif %}>
+            <label class="form-check-label" for="despatchedcheck">
+            Despatched
             </label>    
         </div>
         
         <div class="col-sm-6 col-lg-3 mb-2 form-check">
-            <input class="form-check-input" type="checkbox" name="settled" value="true" id="settlecheck" onchange="finalCheck()" {% if sales_form.settled.value %}checked{% endif %}>
-            <label class="form-check-label" for="settlecheck">
+            <input class="form-check-input" type="checkbox" name="payments" value="true" {% if sales_form.payments.value %}checked{% endif %} id="id_payments">
+            <label class="form-check-label" for="id_payments">
+            Payments
+            </label>
+        </div>
+
+        <div class="col-sm-6 col-lg-3 mb-2 form-check">
+            <input class="form-check-input" type="checkbox" name="settled" value="true" {% if sales_form.settled.value %}checked{% endif %} id="id_settle">
+            <label class="form-check-label">
             Settled
             </label>
         </div>
+
+        <hr>
+
         <div class="d-flex justify-content-between">
             <button type="submit" class="btn btn-primary">Submit</button>
             {% if edit %}<button type="submit" class="btn btn-danger" name="delete" value="yes">Delete</button>{% endif %}
@@ -367,15 +416,72 @@
     </div>
 </form>
 
+<script>
+    window.addEventListener("load", form_validate());
+    function form_validate() {
+        //settle
+        var refer = document.getElementById("id_referrer")
+        var settlec = document.getElementById("id_settle")
+        if (refer.value == "25") {
+            settlec.setAttribute("disabled", "");
+        } else if (refer.value == "3") {
+            settlec.checked = true;
+            settlec.setAttribute("readonly", "");
+        } else if (refer.value == "24") {
+            settlec.checked = true;
+            settlec.setAttribute("readonly", "");
+        } else {
+            settlec.checked = false;
+            settlec.removeAttribute("readonly")
+            settlec.removeAttribute("disabled")
+        }
+        console.log("referrer selected")
+    }
+</script>
+
+<script>//modifying item input
+    var qty_1 = document.getElementById("id_qty_1");
+    qty_1.setAttribute("onchange", "gr_total()");
+    var rate_1 = document.getElementById("id_rate_1");
+    rate_1.setAttribute("onchange", "gr_total()");
+
+    var qty_2 = document.getElementById("id_qty_2");
+    qty_2.setAttribute("onchange", "gr_total()");
+    var rate_2 = document.getElementById("id_rate_2");
+    rate_2.setAttribute("onchange", "gr_total()");
+
+    var qty_3 = document.getElementById("id_qty_3");
+    qty_3.setAttribute("onchange", "gr_total()");
+    var rate_3 = document.getElementById("id_rate_3");
+    rate_3.setAttribute("onchange", "gr_total()");
+
+    var qty_4 = document.getElementById("id_qty_4");
+    qty_4.setAttribute("onchange", "gr_total()");
+    var rate_4 = document.getElementById("id_rate_4");
+    rate_4.setAttribute("onchange", "gr_total()");
+</script>
+
+<script>//modifying grand_total
+    var gst_ele = document.getElementById("gst");
+    var grandd_total = document.getElementById("id_grandd_total");
+    var grand_total_inp = document.getElementById("id_grand_total");
+    function gr_total() {
+        let gr_sum = rate_1.value*qty_1.value + rate_2.value*qty_2.value;
+        let gstrate = gst_ele.value;
+        grandd_total.innerText = gr_sum*gstrate;
+        grand_total_inp.value = gr_sum*gstrate;
+    };
+</script>
+
 <script>//Modify Elements
-    var total = document.getElementById("id_qty_1").value * document.getElementById("id_rate_1").value
-    document.getElementById("total").innerHTML = total;
+    //var total = document.getElementById("id_qty_1").value * document.getElementById("id_rate_1").value
+    //document.getElementById("total").innerHTML = total;
 
     //disable the textarea resizing for all textareas
-    textarea = document.getElementsByTagName("textarea")
-    for (x in textarea) {
-        textarea[x].style.resize = "none"
-    }
+    var textarea = document.getElementsByTagName("textarea")
+    for (let x in textarea) {
+        textarea[x].style.resize = "none";
+    };
 </script>
 
 <!-- AUTO COMPLETE SCRIPT -->

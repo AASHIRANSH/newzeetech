@@ -5,6 +5,10 @@ import datetime
 from django.core import validators #additional validator
 # choices = (('ms conveyor','ms conveyor'),('rewinder','rewinder'))
 
+class CharFieldLower(forms.CharField):
+    def to_python(self, value):
+        return value.lower()
+    
 class ClientEntry(forms.ModelForm):
     phone = forms.CharField(
         min_length=10,
@@ -25,7 +29,7 @@ class ClientEntry(forms.ModelForm):
         )
     )
     
-    company = forms.CharField(
+    company = CharFieldLower(
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -34,7 +38,7 @@ class ClientEntry(forms.ModelForm):
         )
     )
     
-    address = forms.CharField(
+    address = CharFieldLower(
         required=True,
         widget=forms.Textarea(
             attrs={

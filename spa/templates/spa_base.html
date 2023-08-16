@@ -8,7 +8,19 @@
             <button onclick="window.location.assign('{% url 'receipt' %}')" class="btn btn-primary">Receipt</button>
             <button onclick="window.location.assign('{% url 'receipt' %}')" class="btn btn-primary">Payment</button>
             <button onclick="window.location.assign('{% url 'client_page' %}')" class="btn btn-primary">Clients</button>
-            <button onclick="window.location.assign('{% url 'sale_entry' %}')" class="btn btn-primary">Sales Entry</button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" onclick="window.location.assign('{% url 'spa' %}')">Sale</button>
+                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item text-secondary" href="{% url 'sale_entry' %}">Sale Entry</a></li>
+                    <li><a class="dropdown-item text-secondary" href="{% url 'ongoing' %}">Ongoing</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="{% url 'outstandings' %}">Outstandings</a></li>
+                </ul>
+                </div>
+            </div>
             {% endif %}
         </div>
     </div>

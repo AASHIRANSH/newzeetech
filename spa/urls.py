@@ -11,6 +11,7 @@ urlpatterns = [
 
     #
     path('ongoing/', views.sale.ongoing, name="ongoing"),
+    path('outstandings/', views.sale.outstanding, name="outstandings"),
 
     # Editors
     path('clientedit/', views.client_edit, name="client_edit"),
