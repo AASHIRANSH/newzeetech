@@ -1,10 +1,18 @@
 [
     {
-        "name":"conveyor",
+        "name":"ms conveyor",
         "hsn":"842820"
     },
     {
-        "name":"rewinder",
+        "name":"ss conveyor",
+        "hsn":"842820"
+    },
+    {
+        "name":"ms sm rewinder",
+        "hsn":"844190"
+    },
+    {
+        "name":"ss sm rewinder",
         "hsn":"844190"
     },
     {

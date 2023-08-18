@@ -7,8 +7,8 @@ class Client(models.Model):
     company = models.CharField(max_length=100)
     address = models.CharField(max_length=300)
     phone = models.CharField(max_length=50)
-    email = models.EmailField(max_length=254, blank=True)
-    gstin = models.CharField(max_length=15)
+    email = models.EmailField(max_length=254, blank=True, null=True)
+    gstin = models.CharField(unique=True, max_length=15)
     
 
     def __str__(self):
@@ -51,7 +51,7 @@ class Sale(models.Model):
 
     '''for all'''
     date = models.DateField(max_length=20)
-    order_id = models.CharField(max_length=12)
+    order_id = models.CharField(unique=True, max_length=12)
     invoice_id = models.CharField(max_length=20, blank=True, null=True)
     referrer = models.ForeignKey(Referrer, on_delete=models.CASCADE)
 

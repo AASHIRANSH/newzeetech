@@ -147,12 +147,10 @@ class account():
             receipts = Receipt.objects.all().order_by("-date")
             sales = Sale.objects.filter(payments=False)
 
-            
             # companies = []
             # for x in company_arr:
             #     companies.append(x)
-            
-            
+
             #submitted form
             if request.method == 'POST':
                 rpost = request.POST
@@ -209,7 +207,7 @@ class sale():
             #     clients_json = json.load(cli)
             #     company_arr = [x['fields']['company'] for x in clients_json]
             comp_qd = Client.objects.values_list('company', flat=True)
-            print(comp_qd)
+
             companies = []
             for x in comp_qd:
                 companies.append(x)
