@@ -141,6 +141,8 @@ def client_edit(request):
     }
     return render(request,"sales/forms/client.html", vars)
 
+
+from django.db.models import Sum
 class account():
     def receipt(request):
         if request.user.is_authenticated:
@@ -161,20 +163,21 @@ class account():
 
                     csale = Sale.objects.get(id=rpost.get('sale'))
                     salereceipts = csale.receipt_set.all()
+                    rece_tot = salereceipts.aggregate(Sum('amount')) #returns total of amount column
                     receipts_total = 0
 
                     for ram in salereceipts:
                         receipts_total+=ram.amount
                     
-                    if csale.grand_total>=receipts_total:
+                    if receipts_total>=csale.grand_total:
                         csale.payments = True
                         csale.save()
                         if csale.grand_total>receipts_total:
                             messages.error(request, f'Extra payment received from {csale.company}')
                         else:
-                            messages.success(request, f'Payments completed of {csale.company}')
+                            messages.success(request, f'Payments have been completed of {csale.company}')
                     else:
-                            messages.error(request, f'Payments are still outstanding of {csale.company}')
+                            messages.error(request, f'Payment ({csale.grand_total-receipts_total}) is still outstanding of {csale.company}')
 
 
                     messages.success(request,'Receipt was Added!!')
