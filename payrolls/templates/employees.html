@@ -11,6 +11,16 @@
     
     <div class="container py-5">
         <div class="row row-cols-3">
+            {% if edit %}
+            <div class="col mb-2">
+                <div class="input-group">
+                    <span class="input-group-text">{{form.date_resigned.label_tag}}</span>
+                    {{form.date_resigned}}
+                    {{form.date_resigned.errors}}
+                </div>
+            </div>
+            {% endif %}
+            
             <div class="col mb-2">
                 <div class="input-group">
                     <span class="input-group-text">{{form.date_joined.label_tag}}</span>
@@ -69,14 +79,14 @@
         <tbody>
             {% if employees %}
                 {% for employee in employees %}
-                    <tr id="sale_row" class="{{entry.id}} {% if entry.final == False %}bg-danger{% endif %}" onclick="window.location.assign('{% url 'sale_edit' %}?id='+this.classList[0])"> <!--data-bs-toggle="modal" data-bs-target="#salesEdit"-->
+                    <tr id="" class="" onclick="window.location.assign('?id={{employee.id}}')"> <!--data-bs-toggle="modal" data-bs-target="#salesEdit"-->
                         <th scope="row">{{forloop.counter}}</th>
                         <td>{{employee.name}}</td>
                         <td>{{employee.salary}}</td>
                     </tr>
                 {% endfor %}
             {% else %}
-                No Receipts Currently!!
+                No Employees Currently!!
             {% endif %}
         </tbody>
     </table>

@@ -342,40 +342,43 @@
         </div>
 
         <hr>
-        <div class="d-flex justify-content-between">
-            <div>
-                <div class="mb-2">
+        <table class="table">
+            <tr>
+                <td class="mb-2">
                     Total:
-                </div>
-                <div class="mb-2">
-                    Freight:
-                </div>
-                <div class="mb-2">
+                </td>
+                <td>
+                </td>
+                <td class="mb-2">
+                    <span id="total">0.00</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="mb-2">
                     GST:
-                </div>
-                <div class="fw-bold">
-                    Grand Total:
-                </div>
-            </div>
-            <div class="text-end">
-                <div class="mb-2">
-                    00.00
-                </div>
-                <div class="mb-2">
-                    NA
-                </div>
-                <div class="mb-2">
+                </td>
+                <td class="mb-2">
                     <select class="form-select form-select-sm" id="gst" onchange="gr_total()">
-                        <option value="1.6">6%</option>
+                        <option value="1.06">6%</option>
                         <option value="1.12">12%</option>
                         <option value="1.18" selected>18%</option>
                     </select>
-                </div>
-                <div>
+                </td>
+                <td>
+                    <span id="gstval">0.00</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="mb-2">
+                    Grand Total:
+                </td>
+                <td>
+                </td>
+                <td class="mb-2">
                     <div id="id_grandd_total">{{sales_form.grand_total.value|default:"0.00"}}</div>
-                </div>
-            </div>
-        </div>
+                </td>
+            </tr>
+        </table>
         <input type="hidden" name="grand_total" value="{{sales_form.grand_total.value|default:'0'}}" required id="id_grand_total">
 
         <hr class="mb-4">
@@ -416,7 +419,7 @@
     </div>
 </form>
 
-<script>
+<script>// Referrer stuff
     window.addEventListener("load", form_validate());
     function form_validate() {
         //settle
@@ -435,11 +438,11 @@
             settlec.removeAttribute("readonly")
             settlec.removeAttribute("disabled")
         }
-        console.log("referrer selected")
+        //console.log("referrer selected")
     }
 </script>
 
-<script>//modifying item input
+<script>// Update Grand Total on change
     var qty_1 = document.getElementById("id_qty_1");
     qty_1.setAttribute("onchange", "gr_total()");
     var rate_1 = document.getElementById("id_rate_1");
@@ -461,27 +464,32 @@
     rate_4.setAttribute("onchange", "gr_total()");
 </script>
 
-<script>//modifying grand_total
+<script>// Calculating grand_total of the items rate value
+    var total_ele = document.getElementById("total");
+    var gst_val = document.getElementById("gstval");
     var gst_ele = document.getElementById("gst");
     var grandd_total = document.getElementById("id_grandd_total");
     var grand_total_inp = document.getElementById("id_grand_total");
     function gr_total() {
-        let gr_sum = rate_1.value*qty_1.value + rate_2.value*qty_2.value;
+        let gr_sum = rate_1.value*qty_1.value + rate_2.value*qty_2.value + rate_3.value*qty_3.value + rate_4.value*qty_4.value;
         let gstrate = gst_ele.value;
-        grandd_total.innerText = gr_sum*gstrate;
-        grand_total_inp.value = gr_sum*gstrate;
+
+        total_ele.innerText = (Math.round((gr_sum) * 100) / 100).toFixed(2);
+        gst_val.innerText = (Math.round((gr_sum) * 100) / 100).toFixed(2);
+        grandd_total.innerText = (Math.round((gr_sum*gstrate) * 100) / 100).toFixed(2);
+        grand_total_inp.value = (Math.round((gr_sum*gstrate) * 100) / 100).toFixed(2);
     };
 </script>
 
-<script>//Modify Elements
+<script>//Textarea resize none
     //var total = document.getElementById("id_qty_1").value * document.getElementById("id_rate_1").value
     //document.getElementById("total").innerHTML = total;
 
     //disable the textarea resizing for all textareas
-    var textarea = document.getElementsByTagName("textarea")
+    var textarea = document.getElementsByTagName("textarea");
     for (let x in textarea) {
         textarea[x].style.resize = "none";
-    };
+    }
 </script>
 
 <!-- AUTO COMPLETE SCRIPT -->

@@ -86,7 +86,7 @@
                     adv.innerText = advam; //rendering the calculated advance in adv_id element
                     
                     tod = new Date().toLocaleDateString();
-                    if (tod == d.toLocaleDateString()) {
+                    if (tod <= d.toLocaleDateString()) {
                         vars[0].classList.add("bg-danger");
                         vars[0].classList.add("text-white");
                     }
