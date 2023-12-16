@@ -50,8 +50,8 @@ class Sale(models.Model):
     
 
     '''for all'''
-    date = models.DateField(max_length=20)
-    order_id = models.CharField(max_length=12)
+    date = models.DateField()
+    order_id = models.CharField(max_length=15)
     invoice_id = models.CharField(max_length=20, blank=True, null=True)
     referrer = models.ForeignKey(Referrer, on_delete=models.CASCADE)
 
@@ -66,12 +66,12 @@ class Sale(models.Model):
 
 
     '''client ship to'''
-    phones = models.CharField(max_length=50, default=None, blank=True, null=True)
-    names = models.CharField(max_length=200, default=None, blank=True, null=True)
-    companys = models.CharField(max_length=200, default=None, blank=True, null=True)
-    emails = models.EmailField(max_length=200, default=None, blank=True, null=True)
-    addresss = models.CharField(max_length=1000, default=None, blank=True, null=True)
-    gstins = models.CharField(max_length=15, default=None, blank=True, null=True)
+    phones = models.CharField(max_length=50, default="", blank=True, null=True)
+    names = models.CharField(max_length=200, default="", blank=True, null=True)
+    companys = models.CharField(max_length=200, default="", blank=True, null=True)
+    emails = models.EmailField(max_length=200, default="", blank=True, null=True)
+    addresss = models.CharField(max_length=1000, default="", blank=True, null=True)
+    gstins = models.CharField(max_length=15, default="", blank=True, null=True)
     
 
     '''item1'''
@@ -81,8 +81,8 @@ class Sale(models.Model):
     rate_1 = models.IntegerField(default=1)
 
     '''item2'''
-    item_2 = models.CharField(max_length=50,null=True, blank=True)
-    desc_2 = models.CharField(max_length=200,null=True, blank=True)
+    item_2 = models.CharField(max_length=50, null=True, blank=True)
+    desc_2 = models.CharField(max_length=200, null=True, blank=True)
     qty_2 = models.IntegerField(null=True, blank=True)
     rate_2 = models.IntegerField(null=True, blank=True)
 
@@ -93,8 +93,8 @@ class Sale(models.Model):
     rate_3 = models.IntegerField(null=True, blank=True)
 
     '''item4'''
-    item_4 = models.CharField(max_length=50,null=True, blank=True)
-    desc_4 = models.CharField(max_length=200,null=True, blank=True)
+    item_4 = models.CharField(max_length=50, null=True, blank=True)
+    desc_4 = models.CharField(max_length=200, null=True, blank=True)
     qty_4 = models.IntegerField(null=True, blank=True)
     rate_4 = models.IntegerField(null=True, blank=True)
 
@@ -132,7 +132,7 @@ class Sale(models.Model):
     qty_10 = models.IntegerField(null=True, blank=True)
     rate_10 = models.IntegerField(null=True, blank=True)
 
-    grand_total = models.IntegerField()
+    grand_total = models.FloatField()
 
     note = models.TextField()
 

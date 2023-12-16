@@ -300,6 +300,7 @@ class sale():
                     messages.success(request,'Sale Added!!')
                     return redirect('spa')
                 else:
+                    print(sales_entry_form.errors)
                     messages.error(request,'Please check below for any mistakes')
             else:
                 sales_entry_form = forms.SaleEntry()    #append "(auto_id='id_%s')" to use custom id behaviour, this example is set by default
