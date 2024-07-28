@@ -4,7 +4,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 '''-------------------------------------------'''
 from django.shortcuts import render, redirect, HttpResponseRedirect, get_object_or_404
 from django.contrib import messages
-from .sales.models import Client, Sale, Item
+from .sales.models import Client, Sale, Item, Referrer
 from .accounts.models import Receipt
 from . import forms
 
@@ -89,8 +89,15 @@ def clients(request):
 
 
 def sales_table(request):
+    get = request.GET
+    if get.get("referrer",""):
+        sales = Sale.objects.filter(referrer__name=get.get("referrer"))
+    else:
+        sales = Sale.objects.all().order_by("-date")
+    refs = Referrer.objects.all()
     vars = {
-        "sales_table":Sale.objects.all().order_by("-date"),
+        "sales_table":sales,
+        "refs":refs
     }
     return render(request,"sales/sales_table_page.html", vars)
 

@@ -7,18 +7,26 @@
     {% include 'spa_base.html' %}
 
     <div class="container" id="sales_table">
-        <hr>
-        <table class="table table-hover text-uppercase">
+        <div class="d-flex my-3">
+            <div class="col-3">
+                <select id="filt" name="referrer" class="form-select text-secondary">
+                    <option value="">--- REFERRER ---</option>
+                    {% for r in refs %}
+                        <option value="{{r.name}}">{{r.name}} ({{r.company}})</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <table class="table table-hover text-uppercase rounded overflow-hidden shadow mb-5">
             <thead class="bg-success text-white text-uppercase">
             <tr class="">
                 <th scope="col">#</th>
                 <th scope="col">date</th>
-                <th scope="col">order no.</th>
-                <th scope="col">invoice no.</th>
+                <th scope="col">order</th>
+                <th scope="col">invoice</th>
                 <th scope="col">name</th>
                 <th scope="col">company</th>
-                <th scope="col">item</th>
-                <th scope="col">qty</th>
+                <th scope="col">address</th>
             </tr>
             </thead>
             <tbody>
@@ -31,8 +39,7 @@
                             <td>{{entry.invoice_id}}</td>
                             <td>{{entry.name}}</td>
                             <td>{{entry.company}}</td>
-                            <td>{{entry.item_1}}</td>
-                            <td>{{entry.qty_1}}</td>
+                            <td>{{entry.address}}</td>
                         </tr>
                     {% endfor %}
                 {% else %}
@@ -61,9 +68,14 @@
     </div>
     
     <script>
-        var row = document.getElementById("sale_row");
-        var sales_label = document.getElementById("salesLabel");
-        var modal_body = document.getElementById("modal_body");
+        let filt = document.getElementById("filt");
+        filt.addEventListener("change",function(){
+            window.location.assign("?referrer="+this.value);
+        });
+
+        //var row = document.getElementById("sale_row");
+        //var sales_label = document.getElementById("salesLabel");
+        //var modal_body = document.getElementById("modal_body");
 
         // row.addEventListener("click",function(){
         //     id = this.getElementsByTagName("th")[0].innerText;
